@@ -1,0 +1,83 @@
+version: "3.3"
+services:
+  geos:
+    image: kartoza/geoserver:2.23.0
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    restart: on-failure
+    environment:
+      - GEOSERVER_DATA_DIR=/opt/geoserver/data_dir
+      - GEOWEBCACHE_CACHE_DIR=/opt/geoserver/data_dir/gwc
+      - GEOSERVER_ADMIN_PASSWORD_FILE=/run/secrets/geo_adminp
+      - GEOSERVER_ADMIN_USER_FILE=/run/secrets/geo_adminn
+      - HTTP_PROXY_NAME=jornada.nmsu.edu
+      - SSL=true
+      - HTTP_SCHEME=https
+      #- HTTP_PROXY_PORT=443
+      - INITIAL_MEMORY=2G
+      - MAXIMUM_MEMORY=4G
+    #depends_on:
+     # db:
+      #  condition: service_healthy
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    secrets:
+      - geo_adminp
+      - geo_adminn
+
+  db:
+    image: kartoza/postgis:15-3.3
+    volumes:
+      - geo-db-data:/var/lib/postgresql
+    ports:
+      - 32767:5432
+    environment:
+      - POSTGRES_DB=gisdb
+      - POSTGRES_USER_FILE=/run/secrets/geo_pgu
+      - POSTGRES_PASS_FILE=/run/secrets/geo_pgp
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+      - RUN_AS_ROOT=false
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
+    secrets:
+      - geo_pgp
+      - geo_pgu
+
+  nginx:
+     image: nginx
+     volumes:
+       - ./sites-enabled:/etc/nginx/conf.d:ro
+     logging:
+       driver: json-file
+       options:
+         max-size: 200m
+         max-file: '10'
+     #depends_on:
+      # - geoserver
+     ports:
+       - "8008:8008"
+secrets:
+  geo_adminp:
+    file: adminp.txt
+  geo_adminn:
+    file: adminn.txt
+  geo_pgu:
+    file: pgu.txt
+  geo_pgp:
+    file: pgp.txt
+
+volumes:
+  # geoserver volumes
+  geoserver-data:
+  settings:
+  # postgres volumes
+  # dbbackups:
+  # postgis-data:
+  geo-db-data:
+
