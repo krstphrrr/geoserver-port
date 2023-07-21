@@ -58,10 +58,18 @@ services:
        options:
          max-size: 200m
          max-file: '10'
+     restart: on-failure
      #depends_on:
       # - geoserver
      ports:
        - "8008:8008"
+  node:
+    build:
+      context: ./old-maps
+      dockerfile: ./maps.Dockerfile
+    image: landscapedatacommons/jornada-asombromaps:1.0.0
+    ports:
+      - 3001:3000
 secrets:
   geo_adminp:
     file: adminp.txt

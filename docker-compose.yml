@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  geoserver:
+  geos:
     image: kartoza/geoserver:${GS_VERSION}
     volumes:
       - geoserver-data:/opt/geoserver/data_dir
@@ -49,9 +49,16 @@ services:
          max-size: 200m
          max-file: '10'
      depends_on:
-       - geoserver
+       - geos
      ports:
-       - "80:80"
+       - "8008:8008"
+  node:
+    build:
+      context: ./old-maps
+      dockerfile: ./maps.Dockerfile
+    image: landscapedatacommons/jornada-asombromaps:1.0.0
+    ports:
+      - 3001:3000
 volumes:
   # geoserver volumes
   geoserver-data:

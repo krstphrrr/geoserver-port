@@ -1,4 +1,5 @@
 **/gis-schema.sql
 **/.env
 **/*.txt
-
+**/*.sql
+pgdumps/*
