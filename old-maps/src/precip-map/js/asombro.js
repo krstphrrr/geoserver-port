@@ -723,7 +723,7 @@ function initPage() {
 
 
   //******Read in json file
-  d3.json("gis/precip_simp.json").then(function(data) {
+  d3.json("precip/gis/precip_simp.json").then(function(data) {
     tmpTopo = topojson.feature(data, data.objects.precip);
     addTopo(tmpTopo);
   });
