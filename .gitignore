@@ -2,4 +2,6 @@
 **/.env
 **/*.txt
 **/*.sql
-pgdumps/*
+**/pgdumps/*
+**/agent
+api-docs/geoindicators-request-breakdown.md
