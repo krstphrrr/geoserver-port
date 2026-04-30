@@ -723,7 +723,7 @@ function initPage() {
 
 
   //******Read in json file
-  d3.json("min/gis/minTemp_simp.json").then(function(data) {
+  d3.json("gis/minTemp_simp.json").then(function(data) {
     tmpTopo = topojson.feature(data, data.objects.minTemp);
     addTopo(tmpTopo);
   });
@@ -839,7 +839,6 @@ function addTopo(topo) {
       .on("mouseenter", function() { d3.select(this).classed("svgHover", true); showIt(d3.select(this).property("data-tt")); resizeTooltip();})
       .on("mousemove", function() { tooltip.style("top", (d3.event.pageY-50) + "px").style("left", (d3.event.pageX) + "px"); resizeTooltip(); })
       .on("mouseleave", function() { d3.select(this).classed("svgHover", false); tooltip.style("visibility", "hidden");})
-      .call(d3.drag()) //.on("start", function() { d3.select(this).style("cursor", ""); console.log("drag start"); }).on("end", function() { d3.select(this).style("cursor", ""); console.log("drag end"); }))
       .on("click", function(d) { if(d3.select(this).classed("svgSelected") == true) { d3.select(this).classed("svgSelected", false); remInfo(d.properties); } else { d3.select(this).classed("svgSelected", true); addInfo(d.properties); addCSV(); } })
       .on("touchend", function() { if(d3.select(this).classed("svgSelected") == true) { d3.select(this).classed("svgSelected", false); } else { d3.select(this).classed("svgSelected", true); } });
 
