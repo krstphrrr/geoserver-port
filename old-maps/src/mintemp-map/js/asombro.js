@@ -256,6 +256,7 @@ function initPage() {
     transparent: true,
     tiled: true,
     version: '1.3.0',
+    tileSize: 512,
     maxZoom: 20
   });
 
