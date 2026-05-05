@@ -19,10 +19,6 @@ services:
       #- HTTP_PROXY_PORT=443
       - INITIAL_MEMORY=2G
       - MAXIMUM_MEMORY=4G
-      - CORS_ENABLED=true
-      - CORS_ALLOWED_ORIGINS=*
-      - CORS_ALLOWED_METHODS=GET,POST,HEAD
-      - CORS_ALLOWED_HEADERS=*
     #depends_on:
      # db:
       #  condition: service_healthy
